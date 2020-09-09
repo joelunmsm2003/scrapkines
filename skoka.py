@@ -21,7 +21,7 @@ for x in range(100):
 
 	u='https://pe.skokka.com/kinesiologas/lima-metropolitana/?p='+str(x+1)
 
-	#print u
+	print u
 
 
 	try:
@@ -54,130 +54,125 @@ for x in range(100):
 			print 'URL...',url
 
 
-			try:
+			x = requests.get(url, headers=headers)
 
-				x = requests.get(url, headers=headers)
+			datax = x.text
 
-				datax = x.text
+		
 
+			soupx = BeautifulSoup(datax)
+
+			#print soupx
+
+		
+			imagenes=[]
 			
+			for i in soupx.find_all('div', class_='brick'):
 
-				soupx = BeautifulSoup(datax)
-
-				#print soupx
-
-			
-				imagenes=[]
-				
-				for i in soupx.find_all('div', class_='brick'):
-
-					try:
-
-					
-						soupxi = BeautifulSoup(str(i))
-
-						for ix in soupxi.find_all('v-lazy-image'):
-
-							imagenes.append(ix.get('src'))
-
-
-					
-
-					except:
-
-						pass
-
-
-				for i in soupx.find_all('h6', class_='detailtag'):
-
-					try:
-
-					
-						soupxi = BeautifulSoup(str(i))
-
-						ciudad= soupxi.text.split('|')[3]
-					
-
-					except:
-
-						pass
+				try:
 
 				
-				for h in soupx.find_all('div', class_='mobilecontactbar'):
+					soupxi = BeautifulSoup(str(i))
 
-					try:
+					for ix in soupxi.find_all('v-lazy-image'):
 
-						soupxi = BeautifulSoup(str(h))
-
-						for ix in soupxi.find_all('phone-button'):
-
-							fono = ix.get('number')
+						imagenes.append(ix.get('src'))
 
 
-					except:
-
-						pass
-
-
-				print fono
-
-				detalle=[]
-
-				for d in soupx.find_all('b'):
-
-					try:
-
-						for x in BeautifulSoup(str(d)).find_all('b')[0]:
-
-							detalle.append(x)
-
-
-						edad=detalle[0].split(' ')[0]
-							
-
-
-					except:
-
-						pass
-
-
-				for d in soupx.find_all('p',class_='text-justify'):
-
-					try:
-
-						cont_anuncio = d.text
-
-
-					except:
-
-						pass
-
-
-				print edad
-
-
-				contenido = json.dumps({'wsp':fono,'edad':edad,'ciudad':ciudad,'anuncio':cont_anuncio,'imagenes':imagenes,'fono':fono})
 				
-				try :
-
-					dat= requests.get('http://aniavestidos.com:5000/verificatelefono/'+str(fono))
-
-					print dat
-
-
-					if dat.text!='"no"':
-
-						print 'Entre..... =)'
-
-						cc = requests.post('http://aniavestidos.com:5000/guardaskoka', data = {'url':url,'contenido':contenido})
 
 				except:
 
-					print 'Hay un error =('
+					pass
+
+
+			for i in soupx.find_all('h6', class_='detailtag'):
+
+				try:
+
+				
+					soupxi = BeautifulSoup(str(i))
+
+					ciudad= soupxi.text.split('|')[3]
+				
+
+				except:
+
+					pass
+
+			
+			for h in soupx.find_all('div', class_='mobilecontactbar'):
+
+				try:
+
+					soupxi = BeautifulSoup(str(h))
+
+					for ix in soupxi.find_all('phone-button'):
+
+						fono = ix.get('number')
+
+
+				except:
+
+					pass
+
+
+			print 'TELEFONO EXTRAIDO......',fono
+
+			detalle=[]
+
+			for d in soupx.find_all('b'):
+
+				try:
+
+					for x in BeautifulSoup(str(d)).find_all('b')[0]:
+
+						detalle.append(x)
+
+
+					edad=detalle[0].split(' ')[0]
+						
+
+
+				except:
+
+					pass
+
+
+			for d in soupx.find_all('p',class_='text-justify'):
+
+				try:
+
+					cont_anuncio = d.text
+
+
+				except:
+
+					pass
+
+
+			print edad
+
+
+			contenido = json.dumps({'wsp':fono,'edad':edad,'ciudad':ciudad,'anuncio':'cont_anuncio','imagenes':imagenes,'fono':fono})
+			
+			try :
+
+				dat= requests.get('https://aniavestidos.com:5000/verificatelefono/'+str(fono))
+
+				print 'Verifica Tl',dat
+
+
+				if dat.text!='"no"':
+
+					print 'Entre..... =)'
+
+					cc = requests.post('https://aniavestidos.com:5000/guardaskoka', data = {'url':url,'contenido':contenido})
 
 			except:
 
-				pass
+				print 'Hay un error =('
+
 
 
 			

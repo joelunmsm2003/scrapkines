@@ -1,7 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from bs4 import BeautifulSoup
-
+import json
 import requests
-
+import re
 n=0
 for n in range(0,100):
 
@@ -10,11 +13,11 @@ for n in range(0,100):
 
 	if n==0:
 
-		r  = requests.get("https://www.locanto.com.pe/Chica-busca-chico/202/")
+		r  = requests.get("https://lima.locanto.com.pe/Chica-busca-chico/202/")
 
 	else:
 
-		r  = requests.get("https://www.locanto.com.pe/Chica-busca-chico/202/"+str(n))
+		r  = requests.get("https://lima.locanto.com.pe/Chica-busca-chico/202/"+str(n))
 
 	data = r.text
 
@@ -32,15 +35,12 @@ for n in range(0,100):
 
 		datax = x.text
 
+
+
 		soupx = BeautifulSoup(datax)
 
 		
 
-		for d in soupx.find_all('div', class_='breadcrumb_item'):
-
-
-
-			distrito =len(str(d).split('Lima'))
 
 		print 'entre'
 
@@ -50,9 +50,64 @@ for n in range(0,100):
 
 			contenido = contenido.replace('<div class="user_content" id="js-user_content" itemprop="description">','').replace('<br>','').replace('<br/>','').replace('  ','').replace('<div>','').replace('</div>','')
 
+			
+
+			fono=contenido[3:15].replace(' ','').replace(',','').replace('%','').replace('-','').replace('%','').replace('\n','').replace('\r','')
+
+			fono = re.sub('[^a-zA-Z0-9 \n\.]', '', fono)
+
+			edad=''
+
+			if 'trans' in contenido or 'busco a una chica' in contenido or 'trams' in contenido:
+
+				pass
+
+			else:
+
+				print 'contenido',contenido,
+
+				length=len(contenido.split('años')[0])
+
+				if len(contenido.split('años'))>1:
+					edad=str(contenido.split('años')[0])[length-4:length-1]
+
+				length=len(contenido.split(' 9')[0])
+
+				if len(contenido.split(' 9'))>1:
+					fono=str('9'+str(contenido.split(' 9')[1])[0:8]).replace(' ','')
+
+
+				try:
+
+					_contenido = json.dumps({'distrito':'','fono':fono,'anuncio':str(contenido),'imagenes':'','detalle':'','edad':edad,'precio':''})
+
+
+					print fono
+				
+
+					dat= requests.get('https://aniavestidos.com:5000/verificatelefono/'+str(fono))
+
+					print 'Verificando...',dat.text
+
+
+					if dat.text!='"no"':
+
+						print 'Entre..... =)'
+
+						cc = requests.post('https://aniavestidos.com:5000/guardalocanto', data = {'url':url,'contenido':_contenido})
+
+				except:
+
+					print 'EROOOR'
+
+
+
+
+
+			print '------'
 
 		
-		cc = requests.post('http://mylookxpressapp.com:2000/guardaurl', data = {'url':url,'contenido':contenido})
+		#cc = requests.post('http://mylookxpressapp.com:2000/guardaurl', data = {'url':url,'contenido':contenido})
 
 
 

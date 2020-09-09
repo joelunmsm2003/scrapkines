@@ -1,0 +1,1 @@
+ffmpeg -loop 1 -i /root/Escritorio/imagen.jpg -i /root/Escritorio/audio.mp3 -c:a copy -c:v libx264 -shortest out.mp4

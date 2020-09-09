@@ -1,0 +1,24 @@
+desde el punto de vistas del restaurante
+
+solicitado
+Punto A
+despachado
+en camino
+Punto B
+entregado
+
+Desde el punto de vistas del motorizado
+
+Aceptado
+Punto A (Con el codigo)
+Recogido
+En camino
+-Botones
+ 	Detenido (Alerta al dashboard centro de control del supervisor)
+	Producto Dañado en Camino (Alerta al supervisor)
+Punto B
+Entregado
+Disponible 
+Punto de Espera (Ubicacion de Recomendacion)
+
+Km Min 

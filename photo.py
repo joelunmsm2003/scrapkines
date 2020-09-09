@@ -21,13 +21,14 @@ for u in url:
 
 	data = r.text
 
-	print 'data',data
+
 
 	soup = BeautifulSoup(data)
 
 
 
-	for link in soup.find_all('a', class_='link_anuncio'):
+
+	for link in soup.find_all('a', class_='link_ficha'):
 
 		print 'href...',link.get('href')
 
@@ -35,152 +36,202 @@ for u in url:
 
 		url = 'https://photokinesiologas.com'+link.get('href')
 
-		try:
 
-			x = requests.get(url)
 
-			datax = x.text
+		x = requests.get(url)
 
-			soupx = BeautifulSoup(datax)
+		datax = x.text
 
-			
+		soupx = BeautifulSoup(datax)
 
-			edad=''
-			for anuncio in soupx.find_all("span", {"id": "anuncio_edad"}):
 
-				try:
-					
-					edad = anuncio.get_text().replace('|','').replace(u'años','')
+		
 
-				except:
-
-					pass
-
-
-			precio=''
-			for data in soupx.find_all('div', {"id": "anuncio_disponibilidad"}):
-
-				try:
-					
-					precio = data.get_text()
-
-					print precio
-
-				except:
-
-					pass
-
-
-			_telefono=[]
-
-			for wsp in soupx.find_all('span', class_='boton_telefono whatsapp'):
-
-				try:
-
-					telefono =  wsp.get('data-telefono')
-
-					_telefono.append(telefono)
-
-					telefono=_telefono[0]
-
-				except:
-
-					for wsp in soupx.find_all('td', class_='boton_texto'):
-
-						try:
-
-							print wsp
-
-							telefono = wsp.get_text()
-
-						except:
-
-							pass
-
-
-			total_cont_anuncio =[]
-
-			for anuncio in soupx.find("div", {"id": "anuncio_texto"}):
-
-				try:
-
-					cont_anuncio =  anuncio.get_text()
-
-					
-					total_cont_anuncio.append(cont_anuncio)
-
-				except:
-
-					pass
-
-
-
-			for anuncio in soupx.find_all("span", {"id": "anuncio_poblacion"}):
-
-
-				distrito =  anuncio.get_text()
-
-
-
-
-
-			imagenes = []
-
-			for sobremi in soupx.find("div", {"class": "contenedor"}):
-
-				try:
-
-					imagen= sobremi.get('src')
-
-					imagenes.append(imagen)
-
-				except:
-
-					pass
-
-			listdetalle=[]
-
-			for detalle in soupx.find_all("a", {"class": "anuncio_categoria categoria_sel_off"}):
-
-				try:
-
-					detalle= detalle.get_text()
-
-					listdetalle.append(detalle)
-
-				except:
-
-					pass
-
-
-
-
-			contenido = json.dumps({'distrito':distrito,'fono':telefono,'anuncio':total_cont_anuncio,'imagenes':imagenes,'detalle':listdetalle,'edad':edad,'precio':precio})
-
-			print 'telefono.....',telefono
+		edad=''
+		for anuncio in soupx.find_all("span", {"id": "anuncio_edad"}):
 
 			try:
-
-				dat= requests.get('http://aniavestidos.com:5000/verificatelefono/'+str(telefono))
-
-				print 'Verificando...',dat.text
-
-
-				if dat.text!='"no"':
-
-					print 'Entre..... =)'
-
-					cc = requests.post('http://aniavestidos.com:5000/photoguardaurlphoto', data = {'url':url,'contenido':contenido})
+				
+				edad = anuncio.get_text().replace('|','').replace(u'años','')
 
 			except:
 
 				pass
 
+
+		precio=''
+		for data in soupx.find_all('div', {"id": "anuncio_disponibilidad"}):
+
+			try:
+				
+				precio = data.get_text()
+
+				print precio
+
+			except:
+
+				pass
+
+
+		_telefono=[]
+
+		telefono = ''
+
+
+		# 	try:
+
+		# 		telefono =  wsp.get('data-telefono')
+
+		# 		_telefono.append(telefono)
+
+		# 		telefono=_telefono[0]
+
+		# 	except:
+
+		# 		for wsp in soupx.find_all('td', class_='boton_texto'):
+
+		# 			try:
+
+		# 				print wsp
+
+		# 				telefono = wsp.get_text()
+
+		# 			except:
+
+		# 				pass
+
+		for wsp in soupx.find_all('td', class_='boton_texto'):
+
+			if wsp.get_text()!='WhatsApp':
+
+				telefono = wsp.get_text().replace(' ','')
+
+
+				print 'WSP.........',telefono
+
+
+		for wsp in soupx.find_all('span', class_='boton_telefono whatsapp'):
+
+			telefono=wsp.get('data-telefono')
+
+			print 'TELEFONO 2........',telefono
+
+
+		#for fono in soupx.find("div", {"id": "anuncio_telefono"}):
+
+		#	try:
+
+		#		telefono =  fono.get_text()
+		#		print 'TELEFONO 3........',telefono
+
+		#	except:
+
+		#		pass
+
+
+			
+
+
+		total_cont_anuncio =[]
+
+		'''
+
+		for anuncio in soupx.find("div", {"id": "anuncio_texto"}):
+
+			try:
+
+				cont_anuncio =  anuncio.get_text()
+
+				
+				total_cont_anuncio.append(cont_anuncio)
+
+			except:
+
+				pass
+
+		'''
+
+		for anuncio in soupx.find_all("span"):
+
+
+
+			if u'años' in anuncio.get_text():
+
+				edad = anuncio.get_text().split(' ')[0]
+
+			if 'S/.' in anuncio.get_text():
+
+				precio = anuncio.get_text()
+
+			if len(anuncio.get_text())==11:
+
+				telefono = anuncio.get_text().replace(' ','')
+
+
+
+		for anuncio in soupx.find_all("span",{"itemprop":"name"}):
+
+			distrito= anuncio.get_text()
+
+
+
+
+
+
+
+
+
+		imagenes = []
+
+		for sobremi in soupx.find("div", {"class": "contenedor"}):
+
+			try:
+
+				imagen= sobremi.get('src')
+
+				imagenes.append(imagen)
+
+			except:
+
+				pass
+
+		listdetalle=[]
+
+		for detalle in soupx.find_all("a", {"class": "anuncio_categoria categoria_sel_off"}):
+
+			try:
+
+				detalle= detalle.get_text()
+
+				listdetalle.append(detalle)
+
+			except:
+
+				pass
+
+
+
+
+		contenido = json.dumps({'distrito':distrito,'fono':telefono,'anuncio':total_cont_anuncio,'imagenes':imagenes,'detalle':listdetalle,'edad':edad,'precio':precio})
+
+
+		print contenido
+		try:
+
+			dat= requests.get('https://aniavestidos.com:5000/verificatelefono/'+str(telefono))
+
+			print 'Verificando...',dat.text
+
+
+			if dat.text!='"no"':
+
+				print 'Entre..... =)'
+
+				cc = requests.post('https://aniavestidos.com:5000/photoguardaurlphoto', data = {'url':url,'contenido':contenido})
+
 		except:
 
-			print 'ERROR PHOTOKINES URL'
-
-			pass
+			print 'EROOOR'
 
 		#else:
 
