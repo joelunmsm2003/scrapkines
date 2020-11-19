@@ -52,7 +52,7 @@ for n in range(0,100):
 
 			
 
-			fono=contenido[3:15].replace(' ','').replace(',','').replace('%','').replace('-','').replace('%','').replace('\n','').replace('\r','')
+			fono=contenido[3:15].replace(' ','').replace(',','').replace('%','').replace('-','').replace('%','').replace('\n','').replace('\r','').replace('.','')
 
 			fono = re.sub('[^a-zA-Z0-9 \n\.]', '', fono)
 
@@ -83,6 +83,9 @@ for n in range(0,100):
 
 
 					print fono
+
+					fono=fono.replace(' ','').replace(',','').replace('%','').replace('-','').replace('%','').replace('\n','').replace('\r','').replace('.','')
+
 				
 
 					dat= requests.get('https://aniavestidos.com:5000/verificatelefono/'+str(fono))
