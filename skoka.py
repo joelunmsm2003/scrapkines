@@ -32,7 +32,11 @@ for x in range(100):
 
 		soup = BeautifulSoup(data)
 
+		print 'soup',soup.find_all('p')
+
 	except:
+
+		print 'error'
 
 		data = ''
 
@@ -41,7 +45,9 @@ for x in range(100):
 
 
 
-	for link in soup.find_all('p', class_='item-titolo'):
+	for link in soup.find_all('p', class_='item-title'):
+
+		print 'link',link
 
 		soup =  BeautifulSoup(str(link))
 
