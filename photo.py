@@ -14,7 +14,7 @@ url = ['https://www.photokinesiologas.com/kinesiologas/san-juan-de-miraflores','
 
 for u in url:
 
-	print 'Quueee'
+	print('Quueee')
 
 
 	r  = requests.get(u)
@@ -30,7 +30,7 @@ for u in url:
 
 	for link in soup.find_all('a', class_='link_ficha'):
 
-		print 'href...',link.get('href')
+		print('href...',link.get('href'))
 
 	
 
@@ -66,7 +66,7 @@ for u in url:
 				
 				precio = data.get_text()
 
-				print precio
+				print(precio)
 
 			except:
 
@@ -107,14 +107,14 @@ for u in url:
 				telefono = wsp.get_text().replace(' ','')
 
 
-				print 'WSP.........',telefono
+				print('WSP.........',telefono)
 
 
 		for wsp in soupx.find_all('span', class_='boton_telefono whatsapp'):
 
 			telefono=wsp.get('data-telefono')
 
-			print 'TELEFONO 2........',telefono
+			print('TELEFONO 2........',telefono)
 
 
 		#for fono in soupx.find("div", {"id": "anuncio_telefono"}):
@@ -215,23 +215,22 @@ for u in url:
 		contenido = json.dumps({'distrito':distrito,'fono':telefono,'anuncio':total_cont_anuncio,'imagenes':imagenes,'detalle':listdetalle,'edad':edad,'precio':precio})
 
 
-		print contenido
 		try:
 
 			dat= requests.get('https://aniavestidos.com:5000/verificatelefono/'+str(telefono))
 
-			print 'Verificando...',dat.text
+			print('Verificando...',dat.text)
 
 
 			if dat.text!='"no"':
 
-				print 'Entre..... =)'
+				print('Entre..... =)')
 
 				cc = requests.post('https://aniavestidos.com:5000/photoguardaurlphoto', data = {'url':url,'contenido':contenido})
 
 		except:
 
-			print 'EROOOR'
+			print('EROOOR')
 
 		#else:
 

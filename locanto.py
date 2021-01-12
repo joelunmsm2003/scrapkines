@@ -8,7 +8,7 @@ import re
 n=0
 for n in range(0,100):
 
-	print 'NNNNNN:',n
+	print('NNNNNN:',n)
 
 
 	if n==0:
@@ -42,7 +42,7 @@ for n in range(0,100):
 		
 
 
-		print 'entre'
+		print('entre')
 
 		for linkx in soupx.find_all('div', class_='user_content'):
 
@@ -64,7 +64,7 @@ for n in range(0,100):
 
 			else:
 
-				print 'contenido',contenido,
+				print('contenido',contenido)
 
 				length=len(contenido.split('años')[0])
 
@@ -82,7 +82,7 @@ for n in range(0,100):
 					_contenido = json.dumps({'distrito':'','fono':fono,'anuncio':str(contenido),'imagenes':'','detalle':'','edad':edad,'precio':''})
 
 
-					print fono
+					print(fono)
 
 					fono=fono.replace(' ','').replace(',','').replace('%','').replace('-','').replace('%','').replace('\n','').replace('\r','').replace('.','')
 
@@ -90,24 +90,24 @@ for n in range(0,100):
 
 					dat= requests.get('https://aniavestidos.com:5000/verificatelefono/'+str(fono))
 
-					print 'Verificando...',dat.text
+					print('Verificando...',dat.text)
 
 
 					if dat.text!='"no"':
 
-						print 'Entre..... =)'
+						print('Entre..... =)')
 
 						cc = requests.post('https://aniavestidos.com:5000/guardalocanto', data = {'url':url,'contenido':_contenido})
 
 				except:
 
-					print 'EROOOR'
+					print('EROOOR')
 
 
 
 
 
-			print '------'
+			print('------')
 
 		
 		#cc = requests.post('http://mylookxpressapp.com:2000/guardaurl', data = {'url':url,'contenido':contenido})

@@ -21,7 +21,7 @@ for x in range(100):
 
 	u='https://pe.skokka.com/kinesiologas/lima-metropolitana/?p='+str(x+1)
 
-	print u
+	print(u)
 
 
 	try:
@@ -32,11 +32,11 @@ for x in range(100):
 
 		soup = BeautifulSoup(data)
 
-		print 'soup',soup.find_all('p')
+
 
 	except:
 
-		print 'error'
+		print('error')
 
 		data = ''
 
@@ -47,7 +47,7 @@ for x in range(100):
 
 	for link in soup.find_all('p', class_='item-title'):
 
-		print 'link',link
+		print('link',link)
 
 		soup =  BeautifulSoup(str(link))
 
@@ -57,7 +57,7 @@ for x in range(100):
 
 			url= a.get('href')
 
-			print 'URL...',url
+			print('URL...',url)
 
 
 			x = requests.get(url, headers=headers)
@@ -123,7 +123,7 @@ for x in range(100):
 					pass
 
 
-			print 'TELEFONO EXTRAIDO......',fono
+			print('TELEFONO EXTRAIDO......',fono)
 
 			detalle=[]
 
@@ -157,7 +157,7 @@ for x in range(100):
 					pass
 
 
-			print edad
+			print(edad)
 
 
 			contenido = json.dumps({'wsp':fono,'edad':edad,'ciudad':ciudad,'anuncio':'cont_anuncio','imagenes':imagenes,'fono':fono})
@@ -166,18 +166,18 @@ for x in range(100):
 
 				dat= requests.get('https://aniavestidos.com:5000/verificatelefono/'+str(fono))
 
-				print 'Verifica Tl',dat
+				print('Verifica Tl',dat)
 
 
 				if dat.text!='"no"':
 
-					print 'Entre..... =)'
+					print('Entre..... =)')
 
 					cc = requests.post('https://aniavestidos.com:5000/guardaskoka', data = {'url':url,'contenido':contenido})
 
 			except:
 
-				print 'Hay un error =('
+				print('Hay un error =(')
 
 
 

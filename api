@@ -1,0 +1,6 @@
+GET https://accounts.binance.com/en/oauth/authorize?
+    response_type=code&
+    client_id=a28f296f2cbe6c64b4d5dec24735d39b1b6fffcf&
+    redirect_uri=https%3A%2F%2Fdomain.com%2Foauth%2Fcallback&
+    state=377f36a4557ab5935b36&
+    scope=user:email,user:address
